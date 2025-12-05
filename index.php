@@ -1,5 +1,14 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include 'database.php';
+
+// Only proceed if we have a valid connection
+if (!isset($conn) || !$conn) {
+    die("Database connection failed");
+}
+
 require_once 'init_tables.php';
 
 // Now fetch products with categories
@@ -15,12 +24,18 @@ if (!$result) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Products</title>
+    <title>WhitePink</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h2>Products</h2>
+        
+        <?php if ($error_msg) { ?>
+            <div class="error" style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; border: 1px solid #f5c6cb; margin-bottom: 20px;">
+                <strong>Error:</strong> <?php echo htmlspecialchars($error_msg); ?>
+            </div>
+        <?php } ?>
         
         <div>
             <a href="add_product.php" class="btn btn-primary">Add Product</a>

@@ -109,12 +109,6 @@ $error = isset($error) ? $error : null;
                                 No products available. <a href="add_product.php">Add products first!</a>
                             </td>
                         </tr>
-                    <?php } else { ?>
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 20px;">
-                                No products available. <a href="add_product.php">Add one now!</a>
-                            </td>
-                        </tr>
                     <?php } ?>
                 </tbody>
             </table>

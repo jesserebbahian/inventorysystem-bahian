@@ -1,9 +1,14 @@
 <?php
 // Database initialization - called by all pages to ensure tables exist
 
+if (!isset($conn) || $conn->connect_error) {
+    error_log("Connection not available in init_tables.php");
+    return;
+}
+
 // Check if categories table exists
 $check = $conn->query("SHOW TABLES LIKE 'categories'");
-if ($check->num_rows == 0) {
+if ($check && $check->num_rows == 0) {
     // Tables don't exist - create them
     $sql_statements = array(
         "CREATE TABLE categories (
@@ -56,5 +61,18 @@ if ($check_column && $check_column->num_rows == 0) {
     // Column doesn't exist - add it
     $conn->query("ALTER TABLE products ADD COLUMN category_id INT NOT NULL DEFAULT 1 AFTER price");
     $conn->query("ALTER TABLE products ADD FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE");
+}
+
+// Check if customers table has all required columns
+$check_phone = $conn->query("SHOW COLUMNS FROM customers LIKE 'phone'");
+if ($check_phone && $check_phone->num_rows == 0) {
+    // Phone column doesn't exist - add it
+    $conn->query("ALTER TABLE customers ADD COLUMN phone VARCHAR(20) AFTER email");
+}
+
+$check_address = $conn->query("SHOW COLUMNS FROM customers LIKE 'address'");
+if ($check_address && $check_address->num_rows == 0) {
+    // Address column doesn't exist - add it
+    $conn->query("ALTER TABLE customers ADD COLUMN address VARCHAR(255) AFTER phone");
 }
 ?>
